@@ -1,19 +1,20 @@
-import React from 'react';
+import React from "react";
 //why display and not name of array
 class Grid extends React.Component {
   state = {
     gridLayout: [
-      { display: '' },
-      { display: '' },
-      { display: '' },
-      { display: '' },
-      { display: '' },
-      { display: '' },
-      { display: '' },
-      { display: '' },
-      { display: '' }
+      { display: "", disabled: false },
+      { display: "", disabled: false },
+      { display: "", disabled: false },
+      { display: "", disabled: false },
+      { display: "", disabled: false },
+      { display: "", disabled: false },
+      { display: "", disabled: false },
+      { display: "", disabled: false },
+      { display: "", disabled: false }
     ],
-    turn: false
+    turn: false,
+    count: 0
   };
   changeTurn = () => {
     this.setState(currentState => {
@@ -24,12 +25,22 @@ class Grid extends React.Component {
   };
   fillSquare = idx => {
     this.setState(currentState => {
-      return {
-        display: this.state.turn
-          ? (currentState.gridLayout[idx].display = 'X')
-          : (currentState.gridLayout[idx].display = 'O')
-      };
+      return !currentState.gridLayout[idx].disabled
+        ? {
+            display: this.state.turn
+              ? (currentState.gridLayout[idx].display = "X")
+              : (currentState.gridLayout[idx].display = "O"),
+            disabled: (currentState.gridLayout[idx].disabled = true),
+            count: currentState.count++
+          }
+        : { turn: !currentState.turn };
     });
+    setTimeout(() => {
+      this.gameOver();
+    }, 2000);
+  };
+  gameOver = () => {
+    return this.state.count === 9 ? alert("GAME OVER!") : null;
   };
   render() {
     return (
